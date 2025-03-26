@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+
+/* BASE */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+body{
+    background: url("../signin/img/hero3.png");
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 0 20px;
+}
+
+/* --------------- FORM CONTAINER --------------- */
+
+.form-container{
+    display: flex;
+    width: 1000px;
+    height: 600px;
+    border: 3px solid rgba(255, 255, 255, 0.3) ;
+    border-radius: 30px;
+    backdrop-filter: blur(20px);
+    overflow: hidden;
+}
+
+/* ---------------- fist column ---------------- */
+
+.col-1{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 55%;
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(30px);
+    border-radius: 0 30% 20% 0;
+    transition: border-radius .3s;
+}
+
+.image-layer{
+    position: relative;
+}
+
+.form-image-main{
+    width: 400px;
+    animation: scale-up 3s ease-in-out alternate infinite;
+}
+
+.form-image{
+    position: absolute;
+    left: 0;
+    width: 400px;
+}
+
+/* ---------------- Image Animation ----------------*/
+.waves{
+    animation: up-down 3s ease-in-out alternate infinite;
+}
+
+.circles{
+    animation: left-right 3s ease-in-out alternate infinite;
+}
+
+.feather{
+    animation: up-down 3s ease-in-out alternate infinite;
+}
+
+.stars{
+    animation: scale-down 3s ease-in-out alternate infinite;
+}
+
+.writing{
+    animation: scale-down 3s ease-in-out alternate infinite;
+}
+
+@keyframes left-right{
+    to{
+        transform: translateX(10px);
+    }
+}
+
+@keyframes up-down{
+    to{
+        transform: translateY(10px);
+    }
+}
+
+@keyframes scale-down{
+    to{
+        transform: scale(0.95);
+    }
+}
+
+@keyframes scale-up{
+    to{
+        transform: scale(1.05);
+    }
+}
+
+
+
+
+
+/* ---------------- Featured Words ---------------- */
+
+.featured-words{
+    text-align: center;
+    color: white;
+    width: 300px;
+}
+
+.featured-words span{
+    font-weight: 600;
+    color: #00B69B;
+}
+
+
+/* ---------------- second column ---------------- */
+
+.col-2{
+    position: relative;
+    width: 45%;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.btn-box{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn{
+    font-weight: 500;
+    padding: 5px 30px;
+    border: none;
+    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: .2s;
+}
+
+.btn-1{
+    background: #00B69B;
+}
+
+.btn:hover{
+    opacity: 0.85;
+}
+
+/* ---------------- Login Form ---------------- */
+
+.login-form{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 4vw;
+    transition: .3s;
+}
+
+.forgot-pass{
+    display: flex;
+    justify-content: right;
+    gap: 5px;
+}
+
+.forgot-pass a{
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.forgot-pass a:hover{
+    text-decoration: underline;
+}
+
+/* ---------------- Register Form ---------------- */
+
+.register-form{
+    position: absolute;
+    left: -50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 4vw;
+    transition: .3s;
+}
+
+.register-form .form-title{
+    margin-block: 40px 20px;
+}
+
+
+/* ---------------- Register Next Form ---------------- */
+
+.next-register-form{
+    position: absolute;
+    left: -50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 4vw;
+    transition: .3s;
+}
+
+.input-box select.input-field {
+    appearance: none; /* Removes default dropdown styling */
+}
+
+.input-field .option {
+    background-color: black;
+    color: white;
+}
+
+.input-field[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+}
+
+
+
+
+/* ---------------- Category Form ---------------- */
+
+
+
+.category{
+    position: absolute;
+    left: -50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 4vw;
+    transition: .3s;
+}
+
+.cat-title{
+    margin: 20px 0;
+    color: white;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.container-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    max-width: 500px;
+    margin: auto;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.bubble {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.bubble.selected {
+    background-color: #66d3c3;
+    color: white;
+    border: 1px solid #66d3c3;
+    
+}
+
+
+
+
+
+/* ---------------- Commun ---------------- */
+
+.form-title{
+    margin: 40px 0;
+    color: white;
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.form-inputs{
+    width: 100%;
+}
+
+.input-box{
+    position: relative;
+    width: 100%;
+}
+
+
+
+.input-box .select-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: black;
+    pointer-events: none; /* Ensures the icon doesn't interfere */
+}
+
+.input-field{
+    width: 100%;
+    height: 55px;
+    padding: 12px 40px 12px 15px;
+    margin: 10px 0;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 10px;
+    outline: none;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+::placeholder{
+    color: white;
+    font-size: 15px;
+}
+
+.input-box .icon{
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    color: white;
+}
+
+
+
+.input-submit{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    height: 55px;
+    padding: 0 15px;
+    margin: 10px 0;
+    color: white;
+    background: #00B69B;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.input-submit:hover{
+    gap: 15px;
+}
+
+.social-login{
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.social-login i{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    transition: .2s;
+}
+
+.social-login i:hover{
+    transform: scale(0.9);
+}
+
+
+
+/* ---------------- Responsive -------------------*/
+
+@media (max-width: 892px){
+    .form-container{
+        width: 400px;
+    }
+    .col-1{
+        display: none;
+    }
+    .col-2{
+        width: 100%;
+    }
+}
