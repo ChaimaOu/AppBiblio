@@ -1,16 +1,14 @@
-<?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "biblio";
+<<?php
+session_start();
+$db = new mysqli("localhost", "root", "", "biblio");
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($db->connect_error) {
+    die("Échec de la connexion : " . $db->connect_error);
 }
+
+// Récupérer les admins
+$sql = "SELECT id_admin, nom, prenom, username, email, position FROM Admin";
+$result = $db->query($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -87,18 +85,20 @@ if ($conn->connect_error) {
         </ul>
 
         <ul class="side-menu">
+        <li>
+    <a href="settings.php">
+        <i class="fas fa-cog"></i>
+        <span class="text">Settings</span>
+    </a>
+</li>
+
             <li>
-                <a href="#">
-                    <i class="fas fa-cog"></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="logout">
-                    <i class="fas fa-right-from-bracket"></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
+    <a href="logout.php" class="logout">
+        <i class="fas fa-right-from-bracket"></i>
+        <span class="text">Logout</span>
+    </a>
+</li>
+
         </ul>
     </section>
 
@@ -160,41 +160,33 @@ if ($conn->connect_error) {
 
             <div class="table-data">
                 <div class="order">
-                    <section class="team-section">
-                        <div class="team-container">
-                            <div class="team-card">
-                                <img src="../image/profile2.jpg" alt="Team Member" class="profile-pic">
-                                <h3>Jason Price</h3>
-                                <p>Admin</p>
-                                <p>janick_parisian@yahoo.com</p>
-                                <div class="card-buttons">
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="remove-btn">Remove</button>
-                                </div>
-                            </div>
-                            <div class="team-card">
-                                <img src="../image/profile1.avif" alt="Team Member" class="profile-pic">
-                                <h3>Jukkoe Sisao</h3>
-                                <p>CEO</p>
-                                <p>sibyl_kozey@gmail.com</p>
-                                <div class="card-buttons">
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="remove-btn">Remove</button>
-                                </div>
-                            </div>
-                            <div class="team-card">
-                                <img src="../image/profile1.avif" alt="Team Member" class="profile-pic">
-                                <h3>Jukkoe Sisao</h3>
-                                <p>CEO</p>
-                                <p>sibyl_kozey@gmail.com</p>
-                                <div class="card-buttons">
-                                    <button class="edit-btn">Edit</button>
-                                    <button class="remove-btn">Remove</button>
-                                </div>
-                            </div>
-                            <!-- Add more team cards as needed -->
+                <section class="team-section">
+    <div class="team-container">
+        <?php
+        // Requête pour récupérer tous les admins
+        $sql = "SELECT id_admin, nom, prenom, email, position, photo FROM Admin";
+        $result = $db->query($sql);
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                echo '<div class="team-card">
+                        <img src="' . $row['photo'] . '" alt="Team Member" class="profile-pic">
+                        <h3>' . htmlspecialchars($row['nom']) . ' ' . htmlspecialchars($row['prenom']) . '</h3>
+                        <p>' . htmlspecialchars($row['position']) . '</p>
+                        <p>' . htmlspecialchars($row['email']) . '</p>
+                        <div class="card-buttons">
+                            <a href="edit_admin.php?id=' . $row['id_admin'] . '" class="edit-btn">Edit</a>
+                            <a href="delete_admin.php?id=' . $row['id_admin'] . '" class="remove-btn" onclick="return confirm(\'Voulez-vous vraiment supprimer cet administrateur ?\');">Remove</a>
                         </div>
-                    </section>
+                    </div>';
+            }
+        } else {
+            echo "<p>Aucun administrateur trouvé.</p>";
+        }
+        ?>
+    </div>
+</section>
+
 
 
                 </div>

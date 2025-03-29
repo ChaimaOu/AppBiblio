@@ -1,17 +1,71 @@
+
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "biblio";
+session_start();
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Redirection vers le dashboard
+    header("Location: team.php");
+    exit();
+}
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+// Connexion à la base de données
+$db = new mysqli("localhost", "root", "", "biblio"); // Remplace "nom_de_ta_base" par le vrai nom de ta BDD
+
+if ($db->connect_error) {
+    die("Échec de la connexion : " . $db->connect_error);
+}
+
+if (isset($_POST['signup_admin'])) {
+    $nom = mysqli_real_escape_string($db, $_POST['last_name']); // last_name devient nom
+    $prenom = mysqli_real_escape_string($db, $_POST['first_name']); // first_name devient prenom
+    $username = mysqli_real_escape_string($db, $_POST['username']);
+    $tel = mysqli_real_escape_string($db, $_POST['phone']); // phone devient tel
+    $email = mysqli_real_escape_string($db, $_POST['email']);
+    $position = mysqli_real_escape_string($db, $_POST['position']);
+    $genre = mysqli_real_escape_string($db, $_POST['gender']); // gender devient genre
+    $mot_de_passe = mysqli_real_escape_string($db, $_POST['password']);
+    $hashed_password = password_hash($mot_de_passe, PASSWORD_DEFAULT); // Hash du mot de passe
+
+    // Vérifier si l'admin existe déjà
+    $check_sql = "SELECT * FROM Admin WHERE username = ? OR email = ?";
+    $stmt = mysqli_prepare($db, $check_sql);
+    mysqli_stmt_bind_param($stmt, "ss", $username, $email);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    if (mysqli_num_rows($result) > 0) {
+        echo "L'admin existe déjà.";
+    } else {
+        // Gestion de l'upload de la photo
+$photo_name = "uploads/default.png"; // Image par défaut
+
+if (!empty($_FILES["photo"]["name"])) {
+    $target_dir = "uploads/"; // Dossier où enregistrer l'image
+    $photo_name = $target_dir . basename($_FILES["photo"]["name"]); // Chemin du fichier
+
+    // Déplacer l'image téléchargée vers le dossier "uploads"
+    move_uploaded_file($_FILES["photo"]["tmp_name"], $photo_name);
+}
+
+        // Insérer l'admin dans la base de données
+        $insert_sql = "INSERT INTO Admin (nom, prenom, username, tel, email, mot_de_passe, position, genre, photo) 
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+$stmt = mysqli_prepare($db, $insert_sql);
+mysqli_stmt_bind_param($stmt, "sssssssss", $nom, $prenom, $username, $tel, $email, $hashed_password, $position, $genre, $photo_name);
+
+
+        if (mysqli_stmt_execute($stmt)) {
+            $_SESSION['admin_user'] = $username;
+            $_SESSION['role'] = 'admin';
+            header("Location: http://localhost/admin12/admin12/test3/ind.php"); // Redirection après inscription
+            exit();
+        } else {
+            echo "Erreur lors de l'inscription.";
+        }
+    }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -230,18 +284,20 @@ if ($conn->connect_error) {
         </ul>
 
         <ul class="side-menu">
+        <li>
+    <a href="settings.php">
+        <i class="fas fa-cog"></i>
+        <span class="text">Settings</span>
+    </a>
+</li>
+
             <li>
-                <a href="#">
-                    <i class="fas fa-cog"></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" class="logout">
-                    <i class="fas fa-right-from-bracket"></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
+    <a href="logout.php" class="logout">
+        <i class="fas fa-right-from-bracket"></i>
+        <span class="text">Logout</span>
+    </a>
+</li>
+
         </ul>
     </section>
 
@@ -288,55 +344,61 @@ if ($conn->connect_error) {
             </div>
 
             <div class="container-team">
-                <button class="back-button-team" onclick="showPopup()">&#8592;</button>
-                <div class="form-container-team">
-                    <div class="upload-section-team">
-                        <label for="upload-photo-team" class="upload-label-team">
-                            <div class="photo-placeholder-team" id="photo-preview-team"></div>
-                        </label>
-                        <input type="file" id="upload-photo-team" class="file-input-team" hidden accept="image/*">
-                    </div>
-                    <form>
-                        <div class="input-group-team">
-                            <label>First Name</label>
-                            <input type="text" placeholder="Enter your first name">
-                        </div>
-                        <div class="input-group-team">
-                            <label>Last Name</label>
-                            <input type="text" placeholder="Enter your last name">
-                        </div>
-                        <div class="input-group-team">
-                            <label>Email</label>
-                            <input type="email" placeholder="Enter member email">
-                        </div>
-                        <div class="input-group-team">
-                            <label>Phone Number</label>
-                            <input type="tel" placeholder="Enter member phone number">
-                        </div>
-                        <div class="input-group-team">
-                            <label>Position</label>
-                            <input type="text" placeholder="Enter position">
-                        </div>
-                        <div class="input-group-team">
-                            <label>Gender</label>
-                            <select>
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="submit-button-team">Add Now</button>
-                    </form>
-                </div>
+            <form method="POST" action="team.php">
+    <button type="submit" class="back-button-team">&#8592;</button>
+</form>
+
+    <div class="form-container-team">
+        <div class="upload-section-team">
+            <label for="upload-photo-team" class="upload-label-team">
+                <div class="photo-placeholder-team" id="photo-preview-team"></div>
+
+            </label>
+            <input type="file" id="upload-photo-team" name="photo" class="file-input-team" hidden accept="image/*">
+            <img src="<?php echo $admin['photo']; ?>" alt="Photo de l'admin">
+
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="input-group-team">
+                <label>First Name</label>
+                <input type="text" name="first_name" placeholder="Enter your first name" required>
             </div>
-            <div class="popup-team" id="popup-team">
-                <p>Do you really want to discard the form?</p>
-                <div class="popup-buttons-team">
-                    <button class="continue-button-team" onclick="hidePopup()">Continue</button>
-                    <button class="discard-button-team" onclick="discardForm()">Discard</button>
-                </div>
+            <div class="input-group-team">
+                <label>Last Name</label>
+                <input type="text" name="last_name" placeholder="Enter your last name" required>
             </div>
+            <div class="input-group-team">
+                <label>Email</label>
+                <input type="email" name="email" placeholder="Enter member email" required>
             </div>
+            <div class="input-group-team">
+                <label>Phone Number</label>
+                <input type="tel" name="phone" placeholder="Enter member phone number" required>
             </div>
+            <div class="input-group-team">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter username" required>
+            </div>
+            <div class="input-group-team">
+                <label>Position</label>
+                <input type="text" name="position" placeholder="Enter position" required>
+            </div>
+            <div class="input-group-team">
+                <label>Gender</label>
+                <select name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+            <div class="input-group-team">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" name="signup_admin" class="submit-button-team">Add Now</button>
+        </form>
+    </div>
+</div>
+
         </main>
     </section>
 

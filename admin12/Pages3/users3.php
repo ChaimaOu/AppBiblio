@@ -88,18 +88,20 @@ if ($conn->connect_error) {
       </ul>
 
       <ul class="side-menu">
+      <li>
+    <a href="settings.php">
+        <i class="fas fa-cog"></i>
+        <span class="text">Settings</span>
+    </a>
+</li>
+
         <li>
-          <a href="#">
-            <i class="fas fa-cog"></i>
-            <span class="text">Settings</span>
-          </a>
-        </li>
-        <li>
-          <a href="#" class="logout">
-            <i class="fas fa-right-from-bracket"></i>
-            <span class="text">Logout</span>
-          </a>
-        </li>
+    <a href="logout.php" class="logout">
+        <i class="fas fa-right-from-bracket"></i>
+        <span class="text">Logout</span>
+    </a>
+</li>
+
       </ul>
     </section>
     
